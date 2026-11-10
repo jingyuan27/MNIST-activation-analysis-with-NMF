@@ -1,0 +1,28 @@
+{
+    "relu": {
+        "shape": [
+            10000,
+            128
+        ],
+        "mean": 1.0615447759628296,
+        "std": 1.327203631401062,
+        "minimum": 0.0,
+        "maximum": 11.966449737548828,
+        "zero_ratio": 0.38434765625,
+        "near_zero_ratio": 0.38455078125,
+        "negative_ratio": 0.0
+    },
+    "tanh": {
+        "shape": [
+            10000,
+            128
+        ],
+        "mean": -0.03979763016104698,
+        "std": 0.8028910160064697,
+        "minimum": -1.0,
+        "maximum": 1.0,
+        "zero_ratio": 0.0,
+        "near_zero_ratio": 0.000409375,
+        "negative_ratio": 0.521628125
+    }
+}

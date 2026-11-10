@@ -1,0 +1,99 @@
+\begin{thebibliography}{12}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax\else
+  \urlstyle{same}\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \DeclareUrlCommand\doi{\urlstyle{rm}}
+  \def\eprint#1#2{#2}
+\else
+  \def\doi#1{\href{https://doi.org/#1}{\nolinkurl{#1}}}
+  \let\eprint\href
+\fi
+
+\bibitem[Doshi-Velez et~al.(2017)Doshi-Velez and Kim]{doshivelez2017towards}
+DOSHI-VELEZ F, KIM B.
+\newblock Towards a rigorous science of interpretable machine
+  learning\allowbreak[EB/OL].
+\newblock 2017.
+\newblock \url{https://arxiv.org/abs/1702.08608}.
+
+\bibitem[Lee et~al.(1999)Lee and Seung]{lee1999learning}
+LEE D~D, SEUNG H~S.
+\newblock Learning the parts of objects by non-negative matrix
+  factorization\allowbreak[J/OL].
+\newblock Nature, 1999, 401\allowbreak (6755): 788-791.
+\newblock DOI: \doi{10.1038/44565}.
+
+\bibitem[Nair et~al.(2010)Nair and Hinton]{nair2010relu}
+NAIR V, HINTON G~E.
+\newblock Rectified linear units improve restricted {B}oltzmann
+  machines\allowbreak[C]//\allowbreak
+Proceedings of the 27th International Conference on Machine Learning.
+\newblock Madison, WI: Omnipress, 2010: 807-814.
+
+\bibitem[Glorot et~al.(2011)Glorot, Bordes, and Bengio]{glorot2011deep}
+GLOROT X, BORDES A, BENGIO Y.
+\newblock Deep sparse rectifier neural networks\allowbreak[C]//\allowbreak
+Proceedings of Machine Learning Research: Vol.~15\quad Proceedings of the
+  Fourteenth International Conference on Artificial Intelligence and
+  Statistics.
+\newblock Fort Lauderdale, FL: PMLR, 2011: 315-323.
+
+\bibitem[Lee et~al.(2000)Lee and Seung]{lee2000algorithms}
+LEE D~D, SEUNG H~S.
+\newblock Algorithms for non-negative matrix
+  factorization\allowbreak[C]//\allowbreak
+LEEN T~K, DIETTERICH T~G, TRESP V.
+\newblock Advances in Neural Information Processing Systems 13.
+\newblock Cambridge, MA: MIT Press, 2000: 556-562.
+
+\bibitem[Pedregosa et~al.(2011)Pedregosa, Varoquaux, Gramfort, Michel, Thirion,
+  Grisel, Blondel, Prettenhofer, Weiss, Dubourg, Vanderplas, Passos,
+  Cournapeau, Brucher, Perrot, and Duchesnay]{pedregosa2011sklearn}
+PEDREGOSA F, VAROQUAUX G, GRAMFORT A, et~al.
+\newblock Scikit-learn: machine learning in {P}ython\allowbreak[J].
+\newblock Journal of Machine Learning Research, 2011, 12: 2825-2830.
+
+\bibitem[Cichocki et~al.(2009)Cichocki and Phan]{cichocki2009fast}
+CICHOCKI A, PHAN A~H.
+\newblock Fast local algorithms for large scale nonnegative matrix and tensor
+  factorizations\allowbreak[J/OL].
+\newblock IEICE Transactions on Fundamentals of Electronics, Communications and
+  Computer Sciences, 2009, E92-A\allowbreak (3): 708-721.
+\newblock DOI: \doi{10.1587/transfun.E92.A.708}.
+
+\bibitem[Boutsidis et~al.(2008)Boutsidis and Gallopoulos]{boutsidis2008svd}
+BOUTSIDIS C, GALLOPOULOS E.
+\newblock {SVD} based initialization: a head start for nonnegative matrix
+  factorization\allowbreak[J/OL].
+\newblock Pattern Recognition, 2008, 41\allowbreak (4): 1350-1362.
+\newblock DOI: \doi{10.1016/j.patcog.2007.09.010}.
+
+\bibitem[Hoyer(2004)]{hoyer2004nmf}
+HOYER P~O.
+\newblock Non-negative matrix factorization with sparseness
+  constraints\allowbreak[J].
+\newblock Journal of Machine Learning Research, 2004, 5: 1457-1469.
+
+\bibitem[LeCun et~al.(1998)LeCun, Bottou, Bengio, and
+  Haffner]{lecun1998gradient}
+LECUN Y, BOTTOU L, BENGIO Y, et~al.
+\newblock Gradient-based learning applied to document
+  recognition\allowbreak[J].
+\newblock Proceedings of the IEEE, 1998, 86\allowbreak (11): 2278-2324.
+
+\bibitem[Kingma et~al.(2015)Kingma and Ba]{kingma2015adam}
+KINGMA D~P, BA J.
+\newblock Adam: a method for stochastic optimization\allowbreak[C]//\allowbreak
+3rd International Conference on Learning Representations.
+\newblock San Diego, CA, 2015.
+
+\bibitem[Olshausen et~al.(1996)Olshausen and Field]{olshausen1996emergence}
+OLSHAUSEN B~A, FIELD D~J.
+\newblock Emergence of simple-cell receptive field properties by learning a
+  sparse code for natural images\allowbreak[J/OL].
+\newblock Nature, 1996, 381\allowbreak (6583): 607-609.
+\newblock DOI: \doi{10.1038/381607a0}.
+
+\end{thebibliography}

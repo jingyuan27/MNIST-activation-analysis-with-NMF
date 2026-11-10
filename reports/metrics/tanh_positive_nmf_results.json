@@ -1,0 +1,50 @@
+[
+    {
+        "rank": 4,
+        "reconstruction_error": 0.5166457746972382,
+        "iterations": 69,
+        "time_seconds": 0.30164217948913574
+    },
+    {
+        "rank": 8,
+        "reconstruction_error": 0.44415932379189105,
+        "iterations": 162,
+        "time_seconds": 0.6894314289093018
+    },
+    {
+        "rank": 12,
+        "reconstruction_error": 0.40755163820962637,
+        "iterations": 500,
+        "time_seconds": 2.2836883068084717
+    },
+    {
+        "rank": 16,
+        "reconstruction_error": 0.38330760660055085,
+        "iterations": 264,
+        "time_seconds": 1.5968575477600098
+    },
+    {
+        "rank": 24,
+        "reconstruction_error": 0.3498141338178827,
+        "iterations": 500,
+        "time_seconds": 4.408030271530151
+    },
+    {
+        "rank": 32,
+        "reconstruction_error": 0.32355564607721093,
+        "iterations": 500,
+        "time_seconds": 6.80446720123291
+    },
+    {
+        "rank": 48,
+        "reconstruction_error": 0.2816785537208795,
+        "iterations": 500,
+        "time_seconds": 13.839916944503784
+    },
+    {
+        "rank": 64,
+        "reconstruction_error": 0.24258399951604773,
+        "iterations": 500,
+        "time_seconds": 23.95644736289978
+    }
+]

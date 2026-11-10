@@ -1,0 +1,15 @@
+{
+    "relu": {
+        "mean_zero_ratio": 0.38434765625,
+        "std_zero_ratio": 0.17843930689314738,
+        "mean_eta_squared": 0.4327515994244663,
+        "max_eta_squared": 0.6677309433228616
+    },
+    "tanh": {
+        "mean_zero_ratio": 0.0,
+        "mean_saturation_ratio_095": 0.37672265625,
+        "mean_saturation_ratio_099": 0.2189046875,
+        "mean_eta_squared": 0.4821739576372237,
+        "max_eta_squared": 0.6981347438534233
+    }
+}
