@@ -36,6 +36,7 @@ outputs/
 *.nav
 *.out
 *.snm
+*.synctex.gz
 *.toc
 *.xdv
 *.blg

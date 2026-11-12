@@ -3,7 +3,7 @@
 %  ReLU 与 Tanh 在 MNIST 上的比较研究 —— Beamer 汇报
 %  编译：latexmk -xelatex presentation.tex
 % =============================================================
-\documentclass[aspectratio=169,11pt]{ctexbeamer}
+\documentclass[UTF8,10pt,aspectratio=169]{ctexbeamer}
 
 % ---------- 作者信息（请在此处修改） ----------
 \newcommand{\InfoAuthor}{作者姓名}
@@ -22,92 +22,64 @@
 % 原始实验图片位于 reports/figures/，以相对路径引用，不复制
 \graphicspath{{../../figures/}{../../figures/nmf/}}
 
-% ---------- 配色 ----------
-\definecolor{navy}{HTML}{1F3A5F}
-\definecolor{navylight}{HTML}{E8EEF5}
-\definecolor{accent}{HTML}{C8553D}
+% Native Madrid theme, matching the supplied example.
+\usetheme{Madrid}
+\usecolortheme{default}
+% Match the reference's Song-style Chinese; keep Beamer's Latin fonts.
+\setCJKsansfont{SimSun}[AutoFakeBold=2.5]
+\setCJKmainfont{SimSun}[AutoFakeBold=2.5]
+
+% Color aliases used only by the existing scientific diagrams.
+\usebeamercolor{structure}
+\colorlet{navy}{structure.fg}
+\colorlet{navylight}{structure.fg!10}
+\colorlet{accent}{structure.fg}
 \definecolor{graytext}{HTML}{5A5A5A}
-\definecolor{relucol}{HTML}{1F77B4}   % 与实验图中 ReLU 颜色一致
-\definecolor{tanhcol}{HTML}{FF7F0E}   % 与实验图中 Tanh 颜色一致
-
-% ---------- 主题 ----------
-\usetheme{default}
-\setbeamertemplate{navigation symbols}{}
-\setbeamercolor{frametitle}{fg=white,bg=navy}
-\setbeamercolor{title}{fg=navy}
-\setbeamercolor{subtitle}{fg=graytext}
-\setbeamercolor{structure}{fg=navy}
-\setbeamercolor{normal text}{fg=black!85}
-\setbeamercolor{block title}{fg=white,bg=navy}
-\setbeamercolor{block body}{bg=navylight}
-\setbeamercolor{block title alerted}{fg=white,bg=accent}
-\setbeamercolor{block body alerted}{bg=accent!8}
-\setbeamercolor{alerted text}{fg=accent}
-\setbeamertemplate{itemize item}{\textcolor{navy}{\rule[0.25ex]{0.45em}{0.45em}}}
-\setbeamertemplate{itemize subitem}{\textcolor{graytext}{--}}
-\setbeamertemplate{blocks}[rounded][shadow=false]
-\setbeamerfont{frametitle}{size=\large,series=\bfseries}
-\setbeamerfont{caption}{size=\scriptsize}
-
-\setbeamertemplate{frametitle}{%
-  \nointerlineskip
-  \begin{beamercolorbox}[wd=\paperwidth,ht=2.4em,dp=0.9em,leftskip=1.2em]{frametitle}
-    \usebeamerfont{frametitle}\insertframetitle
-  \end{beamercolorbox}%
-}
-\setbeamertemplate{footline}{%
-  \hbox{%
-  \begin{beamercolorbox}[wd=0.85\paperwidth,ht=2.2ex,dp=1ex,leftskip=1.2em]{}%
-    \color{graytext}\tiny 非负表示与 NMF：ReLU 与 Tanh 在 MNIST 上的比较
-  \end{beamercolorbox}%
-  \begin{beamercolorbox}[wd=0.15\paperwidth,ht=2.2ex,dp=1ex,rightskip=1.2em]{}%
-    \hfill\color{navy}\tiny\insertframenumber\,/\,\inserttotalframenumber
-  \end{beamercolorbox}}%
-}
+\definecolor{relucol}{HTML}{1F77B4}
+\definecolor{tanhcol}{HTML}{FF7F0E}
 
 \newcommand{\smallnote}[1]{{\footnotesize\color{graytext}#1}}
 \newcommand{\src}[1]{{\tiny\color{graytext}数据来源：\texttt{#1}}}
 
-\title{基于非负矩阵分解的神经网络隐藏层表示分析}
+\title[MNIST Activation Analysis with NMF]{基于非负矩阵分解的神经网络隐藏层表示分析}
 \subtitle{ReLU 与 Tanh 在 MNIST 上的比较研究\\[0.4em]
   \footnotesize Understanding Neural Network Representations through Nonnegative Matrix Factorization:\\
   A Comparative Study of ReLU and Tanh on MNIST}
-\author{\InfoAuthor}
-\institute{\InfoInstitute}
-\date{\InfoDate}
+\author{陈曦然 \and 王昌祺 \and 汪敬原}
+\institute{}
+\date{2026年11月13日}
 
 \begin{document}
 
 % =============================================================
 % 1. 标题页
 % =============================================================
-{
-\setbeamertemplate{footline}{}
+
 \begin{frame}
-  \begin{tikzpicture}[remember picture,overlay]
-    \fill[navy] (current page.north west) rectangle ([yshift=-0.55cm]current page.north east);
-    \fill[navy] (current page.south west) rectangle ([yshift=0.25cm]current page.south east);
-  \end{tikzpicture}
-  \vspace{1.2em}
   \titlepage
 \end{frame}
-}
-
-% =============================================================
-% 2. 背景与动机
-% =============================================================
-\begin{frame}{动机：ReLU 的非负输出与 NMF 的非负约束形式相近}
-\begin{columns}[T,onlytextwidth]
-\column{0.46\textwidth}
-\begin{itemize}\small\setlength{\itemsep}{0.5em}
+\begin{frame}{动机}
+\centering
+\begin{minipage}{0.9\textwidth}
+\begin{itemize}\setlength{\itemsep}{0.5em}
   \item 深度网络常被视为“黑盒”：分类准确，但中间层表示难以直接解读
-  \item 隐藏层激活矩阵是网络对数据的\alert{内部编码}，可以当作普通矩阵分析
-  \item ReLU 把负值截断为 0 $\Rightarrow$ 激活矩阵\textbf{非负}
+  \item 隐藏层激活矩阵是网络对数据的内部编码，可以当作普通矩阵分析
+  \item ReLU 把负值截断为 0 $\Rightarrow$ 激活矩阵非负
   \item NMF 只允许非负成分相加，常被认为倾向得到“部分—整体”式表示
         \smallnote{(Lee \& Seung, 1999)}
 \end{itemize}
 
-\column{0.5\textwidth}
+
+\vspace{0.6em}
+\begin{block}{本项目的定位}
+\small 以数值实验观察非负激活与 NMF 之间的联系。
+\end{block}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{动机}
+\centering
+\begin{minipage}{0.9\textwidth}
 \centering
 \begin{tikzpicture}[
   font=\footnotesize,
@@ -124,44 +96,31 @@
   \draw[arr] (A) -- (nmf);
   \node[below=0.15cm of nmf,text=graytext,align=center] {观察：分布、稀疏性、成分结构、类别关联};
 \end{tikzpicture}
-\end{columns}
-\vspace{0.6em}
-\begin{block}{本项目的定位}
-\small 以数值实验观察非负激活与 NMF 之间的联系；\textbf{不}主张 ReLU 网络与 NMF 在数学上等价，也\textbf{不}把更高的稀疏性等同于更强的可解释性。
-\end{block}
+\end{minipage}
 \end{frame}
 
-% =============================================================
-% 3. 研究问题
-% =============================================================
-\begin{frame}{四个研究问题：从激活分布到 NMF 结构}
+\begin{frame}{研究问题}
+	\centering
+	\begin{minipage}{0.92\textwidth}
+		{\small
+			\begin{itemize}
+				\setlength{\itemsep}{1.05em}
+				\setlength{\parsep}{0pt}
+				\item ReLU 与 Tanh 的隐藏层激活在数值分布上的差异
+				\item ReLU 非负激活的稀疏性
+				\item 对激活矩阵做 NMF 得到 components 不同的权重分布
+				\item ReLU 与 Tanh 正值部分的 NMF 在重构误差与稀疏性的差别
+		\end{itemize}}
+	\end{minipage}
+\end{frame}
+
+\begin{frame}{数学背景}
 \centering
-\begin{tikzpicture}[
-  q/.style={draw=navy,fill=navylight,rounded corners=3pt,minimum width=6.6cm,minimum height=1.55cm,
-            text width=6.2cm,align=left,font=\small,line width=0.6pt},
-  tag/.style={fill=navy,text=white,font=\bfseries\small,rounded corners=2pt,inner sep=3pt}]
-  \node[q] (q1) at (0,0) {ReLU 与 Tanh 的隐藏层激活\\在\textbf{数值分布}上有何差异？};
-  \node[q] (q2) at (7.2,0) {ReLU 的非负激活是否表现出\\\textbf{更明显的稀疏性}？};
-  \node[q] (q3) at (0,-2.0) {对激活矩阵做 NMF，能否得到\\\textbf{权重分布各不相同}的 components？};
-  \node[q] (q4) at (7.2,-2.0) {ReLU 与 Tanh 正值部分的 NMF 在\\\textbf{重构误差与稀疏性}上有何差别？};
-  \foreach \n/\t in {q1/RQ1,q2/RQ2,q3/RQ3,q4/RQ4}
-    \node[tag,anchor=north west] at ([xshift=-4pt,yshift=6pt]\n.north west) {\t};
-\end{tikzpicture}
-
-\vspace{1.0em}
-\smallnote{贯穿全程的问题：这些数值现象能在多大程度上帮助我们理解网络的内部表示？}
-\end{frame}
-
-% =============================================================
-% 4. 数学背景
-% =============================================================
-\begin{frame}{数学背景：两种激活函数与非负矩阵分解}
-\begin{columns}[T,onlytextwidth]
-\column{0.42\textwidth}
+\begin{minipage}{0.9\textwidth}
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-  width=6.2cm,height=4.6cm,
+  width=8.4cm,height=4.3cm,
   axis lines=middle,xmin=-3,xmax=3,ymin=-1.4,ymax=3,
   xtick={-2,0,2},ytick={-1,1,2},
   tick label style={font=\scriptsize},
@@ -184,29 +143,32 @@
 饱和 & 仅负半轴 & 两端饱和 \\
 \bottomrule
 \end{tabular}}
+\end{minipage}
+\end{frame}
 
-\column{0.54\textwidth}
+\begin{frame}{数学背景}
+\centering
+\begin{minipage}{0.9\textwidth}
 \begin{block}{非负矩阵分解（NMF）}
 给定非负矩阵 $A\in\mathbb{R}_{\ge0}^{N\times d}$ 与秩 $k$：
 \[
-  \min_{W\ge 0,\;H\ge 0}\ \tfrac12\,\|A-WH\|_F^2,\qquad
-  W\in\mathbb{R}^{N\times k},\ H\in\mathbb{R}^{k\times d}
+  \begin{gathered}\min_{W\ge 0,\;H\ge 0}\ \tfrac12\,\|A-WH\|_F^2,\\[0.2em]
+  W\in\mathbb{R}^{N\times k},\ H\in\mathbb{R}^{k\times d}\end{gathered}
 \]
 \end{block}
 \vspace{0.3em}
 \begin{itemize}\setlength{\itemsep}{0.35em}
-  \item 每一行（样本）被写成 $k$ 个非负成分的\textbf{加权叠加}：
+  \item 每一行（样本）被写成 $k$ 个非负成分的加权叠加
         $a_i\approx\sum_{j=1}^{k} w_{ij}\,h_j$
-  \item 因系数与成分均非负，成分之间\alert{只能相加，不能相互抵消}
-  \item 这一“加性”直觉是本项目的出发点，而\textbf{不是}结论
+  \item 因系数与成分均非负，成分之间只能相加，不能相互抵消
+  \item 加性直觉是本项目的出发点
 \end{itemize}
-\end{columns}
+\end{minipage}
 \end{frame}
 
-% =============================================================
-% 5. 实验设计
-% =============================================================
-\begin{frame}{实验设计：仅激活函数不同的成对对照}
+\begin{frame}{实验设计}
+\centering
+\begin{minipage}{0.9\textwidth}
 \centering
 \begin{tikzpicture}[
   font=\footnotesize,
@@ -227,8 +189,12 @@
 \end{tikzpicture}
 
 \vspace{0.6em}
-\begin{columns}[T,onlytextwidth]
-\column{0.5\textwidth}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{实验设计}
+\centering
+\begin{minipage}{0.9\textwidth}
 \begin{block}{训练配置（取自 \texttt{train\_models.py}）}
 \footnotesize
 \begin{tabular}{@{}ll@{}}
@@ -236,31 +202,30 @@
 预处理 & \texttt{ToTensor()}，像素缩放至 $[0,1]$ \\
 优化 & Adam，学习率 $10^{-3}$，batch 128 \\
 损失 / 轮数 & 交叉熵 / 5 epochs \\
-参数量 & 101{,}770（两模型相同）
+参数量 & 101{,}770
 \end{tabular}
 \end{block}
-\column{0.46\textwidth}
+
+\vspace{0.8em}
+
 \begin{block}{对照设计}
 \footnotesize
 \begin{itemize}
-  \item 两个模型共享\textbf{同一组初始权重}（种子 42）
+  \item 两个模型共享同一组初始权重（种子 42）
   \item 训练数据顺序相同（同一随机生成器）
-  \item 激活在\textbf{全部测试集}上提取，标签对齐
+  \item 激活在全部测试集上提取，标签对齐
 \end{itemize}
 \end{block}
-\end{columns}
+\end{minipage}
 \end{frame}
 
-% =============================================================
-% 6. 分类性能
-% =============================================================
-\begin{frame}{两种网络分类性能相近：测试准确率相差 0.30 个百分点}
-\begin{columns}[c,onlytextwidth]
-\column{0.55\textwidth}
+\begin{frame}{两种网络分类性能相近}
+\centering
+\begin{minipage}{0.9\textwidth}
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-  width=8.2cm,height=5.6cm,
+  width=10.5cm,height=5.5cm,
   xlabel={Epoch},ylabel={测试准确率},
   xtick={1,2,3,4,5},ymin=0.925,ymax=0.975,
   yticklabel style={/pgf/number format/fixed,/pgf/number format/precision=3},
@@ -274,8 +239,12 @@
 \end{tikzpicture}
 
 \src{reports/metrics/training\_results.json}
+\end{minipage}
+\end{frame}
 
-\column{0.42\textwidth}
+\begin{frame}{两种网络分类性能相近}
+\centering
+\begin{minipage}{0.9\textwidth}
 \centering
 {\small
 \begin{tabular}{lrr}
@@ -288,41 +257,32 @@
 训练时间 (s) & 38.57 & 39.22 \\
 \bottomrule
 \end{tabular}}
-
-\vspace{1.0em}
-\begin{alertblock}{解读注意}
-\footnotesize 每种模型\textbf{只训练了一次}，0.30 个百分点的差距不能视为统计显著；训练时间包含每轮测试评估，运行设备未记录。
-\end{alertblock}
-\end{columns}
+\end{minipage}
 \end{frame}
 
-% =============================================================
-% 7. 原始激活分布
-% =============================================================
-\begin{frame}{原始激活：ReLU 集中于零点，Tanh 向 $\pm1$ 两端饱和}
+\begin{frame}{原始激活}
 \centering
-\includegraphics[width=0.92\textwidth]{activation_distributions.png}
+\begin{minipage}{0.9\textwidth}
+\centering
+\includegraphics[width=0.95\linewidth,height=4.7cm,keepaspectratio]{activation_distributions.png}
 
 \vspace{0.3em}
-\begin{columns}[T,onlytextwidth]
-\column{0.48\textwidth}
-\begin{itemize}\small
+
+\begin{itemize}
   \item \textcolor{relucol}{\textbf{ReLU}}：38.43\% 的激活\textbf{恰好为 0}；正值部分右偏长尾，最大值 11.97
 \end{itemize}
-\column{0.48\textwidth}
-\begin{itemize}\small
+
+\begin{itemize}
   \item \textcolor{tanhcol}{\textbf{Tanh}}：U 形分布，52.16\% 为负；$|a|>0.95$ 的比例平均为 37.7\%
 \end{itemize}
-\end{columns}
+
 \src{reports/activations/activation\_statistics.json；reports/metrics/neuron\_summary.json}
+\end{minipage}
 \end{frame}
 
-% =============================================================
-% 8. 原始激活稀疏性
-% =============================================================
-\begin{frame}{稀疏性：ReLU 有大量精确零值，Tanh 的幅度更“均匀”}
-\begin{columns}[T,onlytextwidth]
-\column{0.5\textwidth}
+\begin{frame}{稀疏性}
+\centering
+\begin{minipage}{0.9\textwidth}
 \centering
 {\small
 \begin{tabular}{lrr}
@@ -342,7 +302,7 @@
 \vspace{0.4em}
 \begin{tikzpicture}
 \begin{axis}[
-  ybar,width=7.0cm,height=3.0cm,bar width=10pt,
+  ybar,width=8.4cm,height=2.8cm,bar width=10pt,
   symbolic x coords={精确零值,近零 |a|<0.1,Hoyer},xtick=data,
   ymin=0,ymax=0.5,tick label style={font=\scriptsize},
   enlarge x limits=0.25,
@@ -353,8 +313,13 @@
   \legend{ReLU,Tanh}
 \end{axis}
 \end{tikzpicture}
+\end{minipage}
+\end{frame}
 
-\column{0.47\textwidth}
+\begin{frame}{稀疏性}
+\centering
+\begin{minipage}{0.9\textwidth}
+
 \begin{block}{Hoyer Sparsity {\footnotesize(Hoyer, 2004)}}
 \[
 S(x)=\frac{\sqrt{n}-\|x\|_1/\|x\|_2}{\sqrt{n}-1}\in[0,1]
@@ -364,17 +329,16 @@ S(x)=\frac{\sqrt{n}-\|x\|_1/\|x\|_2}{\sqrt{n}-1}\in[0,1]
 \begin{alertblock}{两类指标不同}
 \footnotesize
 \begin{itemize}
-  \item Tanh 的 Hoyer 基于 $|a|$：衡量\textbf{幅度集中程度}，不代表存在精确零值
+  \item Tanh 的 Hoyer 基于 $|a|$：衡量幅度集中程度，不代表存在精确零值
   \item Tanh 低 Hoyer 主要源于饱和：大量 $|a|\approx1$ 使幅度趋于均匀
 \end{itemize}
 \end{alertblock}
-\end{columns}
+\end{minipage}
 \end{frame}
 
-% =============================================================
-% 9. NMF 方法
-% =============================================================
-\begin{frame}{NMF 方法：ReLU 直接分解，Tanh 仅取正值部分}
+\begin{frame}{NMF 方法}
+\centering
+\begin{minipage}{0.9\textwidth}
 \centering
 \begin{tikzpicture}[font=\scriptsize]
   % A
@@ -394,8 +358,7 @@ S(x)=\frac{\sqrt{n}-\|x\|_1/\|x\|_2}{\sqrt{n}-1}\in[0,1]
 \end{tikzpicture}
 
 \vspace{0.1em}
-\begin{columns}[T,onlytextwidth]
-\column{0.48\textwidth}
+
 \begin{block}{两组输入矩阵}
 \small
 \begin{itemize}
@@ -406,7 +369,12 @@ S(x)=\frac{\sqrt{n}-\|x\|_1/\|x\|_2}{\sqrt{n}-1}\in[0,1]
 \vspace{0.2em}
 \footnotesize\alert{Tanh Positive 丢弃了全部负值（52.16\% 的元素被置 0），并不是完整的带符号 Tanh 表示。}
 \end{block}
-\column{0.48\textwidth}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{NMF 方法}
+\centering
+\begin{minipage}{0.9\textwidth}
 \begin{block}{共同设置（scikit-learn \texttt{NMF}）}
 \small
 \begin{tabular}{@{}ll@{}}
@@ -420,19 +388,16 @@ S(x)=\frac{\sqrt{n}-\|x\|_1/\|x\|_2}{\sqrt{n}-1}\in[0,1]
 \vspace{0.3em}
 \footnotesize 相对重构误差：$\displaystyle \varepsilon_k=\frac{\|A-WH\|_F}{\|A\|_F}$
 \end{block}
-\end{columns}
+\end{minipage}
 \end{frame}
 
-% =============================================================
-% 10. NMF 重构结果
-% =============================================================
-\begin{frame}{重构误差随秩下降；$k\ge8$ 时 ReLU 误差始终更低}
-\begin{columns}[c,onlytextwidth]
-\column{0.58\textwidth}
+\begin{frame}{重构误差随秩下降}
+\centering
+\begin{minipage}{0.9\textwidth}
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-  width=8.8cm,height=6.2cm,
+  width=10.5cm,height=5.5cm,
   xlabel={NMF 秩 $k$},ylabel={相对重构误差 $\varepsilon_k$},
   xtick={4,8,12,16,24,32,48,64},ymin=0.13,ymax=0.55,
   tick label style={font=\scriptsize},label style={font=\small},
@@ -450,9 +415,13 @@ S(x)=\frac{\sqrt{n}-\|x\|_1/\|x\|_2}{\sqrt{n}-1}\in[0,1]
 \end{tikzpicture}
 
 \src{reports/metrics/nmf\_rank\_comparison.json；tanh\_positive\_nmf\_results.json}
+\end{minipage}
+\end{frame}
 
-\column{0.39\textwidth}
-\begin{itemize}\small\setlength{\itemsep}{0.5em}
+\begin{frame}{重构误差随秩下降}
+\centering
+\begin{minipage}{0.9\textwidth}
+\begin{itemize}\setlength{\itemsep}{0.5em}
   \item 两条曲线均随 $k$ 单调下降，符合“秩越大、近似越精细”的预期
   \item $k=4$：Tanh Positive 略低\\
         \footnotesize（0.5166 vs.\ 0.5199）\small
@@ -460,63 +429,63 @@ S(x)=\frac{\sqrt{n}-\|x\|_1/\|x\|_2}{\sqrt{n}-1}\in[0,1]
         \footnotesize（$k=64$：0.1552 vs.\ 0.2426）\small
   \item 16 组配置中有 \alert{7 组}迭代次数等于上限 500，可能未完全收敛
 \end{itemize}
-\vspace{0.3em}
-\smallnote{误差更低只说明低秩近似更容易，\textbf{不}等于可解释性更强。}
-\end{columns}
+\end{minipage}
 \end{frame}
 
-% =============================================================
-% 11. NMF Components
-% =============================================================
-\begin{frame}{ReLU NMF 成分（$k=16$）：各成分集中在不同的神经元子集}
-\begin{columns}[c,onlytextwidth]
-\column{0.64\textwidth}
+\begin{frame}{ReLU NMF 成分（$k=16$）}
 \centering
-\includegraphics[width=\textwidth]{relu_nmf_components_k16.png}
+\begin{minipage}{0.9\textwidth}
+\centering
+\includegraphics[width=0.95\linewidth,height=4.7cm,keepaspectratio]{relu_nmf_components_k16.png}
 
 \smallnote{每行已按行和归一化（行和为 1），以去除成分间的尺度差异。}
-\column{0.33\textwidth}
-\begin{itemize}\small\setlength{\itemsep}{0.5em}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{ReLU NMF 成分（$k=16$）}
+\centering
+\begin{minipage}{0.9\textwidth}
+\begin{itemize}\setlength{\itemsep}{0.5em}
   \item \textbf{行} = 一个 NMF 成分 $h_j$
   \item \textbf{列} = 128 个隐藏神经元之一
   \item 每个成分只在部分神经元上有明显权重，其余接近 0
   \item 成分 $H$ 的平均 Hoyer：0.5625（范围 0.47–0.69）
 \end{itemize}
 \vspace{0.4em}
-\begin{alertblock}{不是笔画图}
-\footnotesize 横轴是神经元编号，\textbf{没有}二维空间排列。此图不能直接读成“横、竖、弯钩”等图像笔画。
+\begin{alertblock}{说明}
+\footnotesize NMF 成分分析不能直接与笔画相对应，笔画体现在输入层
 \end{alertblock}
-\end{columns}
+\end{minipage}
 \end{frame}
 
-% =============================================================
-% 12. 类别关联
-% =============================================================
-\begin{frame}{类别关联：每个数字都有响应最强的成分，但多数成分并不专属}
-\begin{columns}[c,onlytextwidth]
-\column{0.62\textwidth}
+\begin{frame}{类别关联}
 \centering
-\includegraphics[width=\textwidth]{relu_nmf_class_activation_k16.png}
+\begin{minipage}{0.9\textwidth}
+\centering
+\includegraphics[width=0.95\linewidth,height=4.7cm,keepaspectratio]{relu_nmf_class_activation_k16.png}
 
 \smallnote{每格为该类样本在成分上的平均系数 $\bar w_{c,j}$，按列（成分）最大值归一化。}
-\column{0.35\textwidth}
-\begin{itemize}\small\setlength{\itemsep}{0.45em}
-  \item 16 个成分的最强响应类别覆盖了全部 10 个数字
-  \item 例：成分 0 主要对应数字 0，成分 2 对应数字 4
-  \item 也有成分同时响应多个类别：成分 12 在 7、8、9 上均较强，成分 13 在 1、5、9 上均接近最大值
+\end{minipage}
+\end{frame}
+
+\begin{frame}{类别关联}
+\centering
+\begin{minipage}{0.9\textwidth}
+\begin{itemize}\setlength{\itemsep}{0.45em}
+  \item 16 个成分的最强响应类别覆盖了全部 10 个数字，例如成分 0 主要对应数字 0，成分 2 对应数字 4
+  \item 有成分同时响应多个类别：成分 12 在 7、8、9 上均较强，成分 13 在 1、5、9 上均接近最大值
   \item 最强类与次强类的均值比：中位数 1.77，只有 7/16 个成分超过 2
 \end{itemize}
 \vspace{0.3em}
 \smallnote{这里只是统计上的类别关联，不说明某个成分“专门识别”某个数字。}
-\end{columns}
+\end{minipage}
 \end{frame}
 
-% =============================================================
-% 13. ReLU vs Tanh 定量对比
-% =============================================================
-\begin{frame}{综合对比：ReLU 的 NMF 误差更低、成分更集中，但优势依赖于秩}
+\begin{frame}{综合对比}
 \centering
-\includegraphics[width=0.72\textwidth]{relu_tanh_nmf_comparison.png}
+\begin{minipage}{0.9\textwidth}
+\centering
+\includegraphics[width=0.95\linewidth,height=4.7cm,keepaspectratio]{relu_tanh_nmf_comparison.png}
 
 \vspace{0.2em}
 {\footnotesize
@@ -530,25 +499,28 @@ S(x)=\frac{\sqrt{n}-\|x\|_1/\|x\|_2}{\sqrt{n}-1}\in[0,1]
 \end{tabular}}
 
 \vspace{0.2em}
-\smallnote{原图仅含 $k=16,32$；表中其余秩由已保存的 $H$（\texttt{reports/nmf/*.npz}）计算。$k=64$ 时 Tanh Positive 略高。}
+\smallnote{原图仅含 $k=16,32$；表中其余秩由已保存的 $H$（\texttt{reports/nmf/*.npz}）计算，$k=64$ 时 Tanh Positive 略高。}
+\end{minipage}
 \end{frame}
 
-% =============================================================
-% 14. 局限性
-% =============================================================
-\begin{frame}{局限性：当前证据能支持什么，不能支持什么}
-\begin{columns}[T,onlytextwidth]
-\column{0.48\textwidth}
+\begin{frame}{局限性}
+\centering
+\begin{minipage}{0.9\textwidth}
 \begin{block}{实验设计层面}
 \small
 \begin{itemize}\setlength{\itemsep}{0.3em}
   \item \textbf{Tanh Positive $\neq$ 完整 Tanh}：负半部分信息全部丢失
   \item Tanh Positive 本身有 52.16\% 的零元素，比 ReLU 的 38.43\% 还多，二者的输入矩阵结构不同
   \item 7/16 个 NMF 配置迭代次数达到上限 500；原始运行日志未保存
-  \item 每种激活函数\textbf{只训练一次}，没有方差估计
+  \item 每种激活函数只训练一次，没有方差估计
 \end{itemize}
 \end{block}
-\column{0.48\textwidth}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{局限性}
+\centering
+\begin{minipage}{0.9\textwidth}
 \begin{block}{解释层面}
 \small
 \begin{itemize}\setlength{\itemsep}{0.3em}
@@ -558,15 +530,12 @@ S(x)=\frac{\sqrt{n}-\|x\|_1/\|x\|_2}{\sqrt{n}-1}\in[0,1]
   \item 结论仅适用于单隐藏层 MLP、MNIST、当前超参数
 \end{itemize}
 \end{block}
-\end{columns}
+\end{minipage}
 \end{frame}
 
-% =============================================================
-% 15. 总结与展望
-% =============================================================
-\begin{frame}{总结：非负激活与 NMF 的联系在本实验中可观察，但不构成证明}
-\begin{columns}[T,onlytextwidth]
-\column{0.58\textwidth}
+\begin{frame}{总结}
+\centering
+\begin{minipage}{0.9\textwidth}
 \begin{block}{观察到的实验事实}
 \small
 \begin{enumerate}\setlength{\itemsep}{0.25em}
@@ -577,7 +546,12 @@ S(x)=\frac{\sqrt{n}-\|x\|_1/\|x\|_2}{\sqrt{n}-1}\in[0,1]
   \item 成分与数字类别存在统计关联，但多数成分不专属于单一类别
 \end{enumerate}
 \end{block}
-\column{0.38\textwidth}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{总结}
+\centering
+\begin{minipage}{0.9\textwidth}
 \begin{block}{后续方向}
 \small
 \begin{itemize}\setlength{\itemsep}{0.3em}
@@ -587,10 +561,11 @@ S(x)=\frac{\sqrt{n}-\|x\|_1/\|x\|_2}{\sqrt{n}-1}\in[0,1]
   \item 将成分映射回输入空间（如加权平均图像），检验其视觉含义
 \end{itemize}
 \end{block}
-\end{columns}
+
 \vspace{0.6em}
 \centering
-{\color{navy}\bfseries 谢谢！欢迎提问}
+{\color{navy}\bfseries 谢谢！}
+\end{minipage}
 \end{frame}
 
 \end{document}
